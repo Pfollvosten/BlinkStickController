@@ -1,0 +1,273 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>BlinkStick</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <header>
+        <div class="tab">
+            <button class="tablinks" onclick="openMode(event, 'Recommended')">Recommended</button>
+            <button class="tablinks" onclick="openMode(event, 'Blink')">Blink</button>
+            <button class="tablinks" onclick="openMode(event, 'Color')">Color</button>
+            <button class="tablinks" onclick="openMode(event, 'Flow')">Flow</button>
+        </div>
+    </header>
+
+    <!--  TAB CONTENT  -->
+    <!--TAB 1-->
+    <div id="Recommended" class="tabcontent">
+        Deez nutz
+    </div>
+
+    <!--TAB 2-->
+    <div id="Blink" class="tabcontent">
+        <canvas height="400" class="color-canvas">Your browser does not support the HTML5 canvas</canvas>
+        <br>
+        <div class="slider-container">
+            <input type="range" min="1" max="8" value="5" class="speed-slider" id="blinkspeed">
+        </div>
+    </div>
+
+    <!--TAB 3-->
+    <div id="Color" class="tabcontent">
+        <canvas height="400" class="color-canvas">Your browser does not support the HTML5 canvas</canvas>
+    </div>
+
+    <!--TAB 4-->
+    <div id="Flow" class="tabcontent">
+        <!--FLOW COLOR 1-->
+        <svg width="50" height="70" id="flowcolor1">
+            <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0"/>
+            <circle cx="25" cy="25" r="15" fill="black" />
+            <polygon points="18,70 32,70 25,60" fill="red" />
+        </svg>
+        <!-- FLOW COLOR 2-->
+        <svg width="50" height="70" id="flowcolor2">
+            <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0"/>
+            <circle cx="25" cy="25" r="15" fill="black" />
+            <polygon points="18,70 32,70 25,60" fill="red" />
+        </svg>
+        <!-- FLOW COLOR 3-->
+        <svg width="50" height="70" id="flowcolor3">
+            <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0"/>
+            <circle cx="25" cy="25" r="15" fill="black" />
+            <polygon points="18,70 32,70 25,60" fill="red" />
+        </svg>
+        <!-- FLOW COLOR 4-->
+        <svg width="50" height="70" id="flowcolor4">
+            <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0"/>
+            <circle cx="25" cy="25" r="15" fill="black" />
+            <polygon points="18,70 32,70 25,60" fill="red" />
+        </svg>
+        <br> <br>
+        
+        <canvas height="150" class="color-canvas">Your browser does not support the HTML5 canvas</canvas>
+        <br>
+        <div class="slider-container">
+            <input type="range" min="1" max="8" step="1" value="5" fill="none" id="flowspeed" class="speed-slider">
+        </div>
+    </div>
+    <!-- END TAB CONTENT -->
+
+    <footer>
+        <div>
+            <!--Sun icon-->
+            <input type="range" min="1" max="100" value="100" id="brightness" class="slider">
+        </div>
+        <ul class="bot-navbar">
+            <li>
+                <button>Power</button>
+            </li>
+        </ul>
+    </footer>
+
+
+
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        var r = 255, g = 255, b = 255, bright = 100;
+        var mode , speed;
+
+        function updateColor(){
+            var socket = io.connect('http://localhost');
+            socket.emit('color update', 
+                {
+                    red:this.r,
+                    green:this.g,
+                    blue:this.b,
+                    brightness:this.bright
+                }
+            );
+        }
+
+        window.onload = function(){
+            initColorPicker();
+            this.document.getElementsByClassName("tablinks")[0].click();
+        }
+
+        function openMode(evt, modeName){
+            console.log("Tabchange to " + modeName);
+            //Variables
+            var i, tabcontent, tablinks;
+            //Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for(i = 0; i < tabcontent.length; i++){
+                tabcontent[i].style.display = "none";
+            }
+            //Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for(i = 0; i < tablinks.length; i++){
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            //Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(modeName).style.display = "block";
+            evt.currentTarget.classname += " active";
+        }
+
+        function initColorPicker()
+        {
+            var colcanvs = document.getElementsByClassName("color-canvas")
+            for (let i = 0; i < colcanvs.length; i++) {
+                const element = colcanvs[i];
+                
+                var c = element;
+                ctx = c.getContext("2d");
+                // Build Color palette
+                var gradient = ctx.createLinearGradient(0,0, c.width, c.height);
+                gradient.addColorStop(0,    "rgb(255,   0,   0)");
+                gradient.addColorStop(0.15, "rgb(255,   0, 255)");
+                gradient.addColorStop(0.33, "rgb(0,     0, 255)");
+                gradient.addColorStop(0.49, "rgb(0,   255, 255)");
+                gradient.addColorStop(0.67, "rgb(0,   255,   0)");
+                gradient.addColorStop(0.84, "rgb(255, 255,   0)");
+                gradient.addColorStop(1,    "rgb(255,   0,   0)");
+                // Apply gradient to canvas
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, c.width, c.height);
+    
+                c.onclick = function(mouseEvent)
+                {
+                    var imgData = ctx.getImageData(mouseEvent.offsetX, mouseEvent.offsetY, 1, 1);
+                    var rgba = imgData.data;
+                    //alert("rgba(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2] + ", " + rgba[3] + ")");
+                    r = rgba[0];
+                    g = rgba[1]
+                    b = rgba[2];
+                    updateColor();
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            background-color: whitesmoke;
+        }
+
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .active {
+            background-color: #ccc;
+            color: red;
+            text-decoration: underline red;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+            background-color: white;
+        }
+
+        .brightness button{
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 16px;
+            margin: 4px 2px;
+            opacity: 0.6;
+            transition: 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        canvas{
+            width: 100%;
+        }
+
+        
+        slider-container{
+            align-items: center;
+            height: 200 px;
+            background-color: white;
+            align-content: center;
+        }
+
+        /*    SPEED - SLIDER    
+        .speed-slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        border-radius: 5px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        }
+        .speed-slider:hover {
+            opacity: 1;
+        }
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+        .speed-slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+    */
+
+    </style>
+</body>
+
+</html>

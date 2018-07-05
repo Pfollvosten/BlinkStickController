@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>BlinkStick</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="blinkstick.css">
+</head>
+
+<body>
+    <header>
+        <div class="tab">
+            <button class="tablinks" onclick="openMode(event, 'Recommended')">Recommended</button>
+            <button class="tablinks" onclick="openMode(event, 'Blink')">Blink</button>
+            <button class="tablinks" onclick="openMode(event, 'Color')">Color</button>
+            <button class="tablinks" onclick="openMode(event, 'Flow')">Flow</button>
+        </div>
+    </header>
+
+    <!--  TAB CONTENT  -->
+
+    <!--TAB 1-->
+    <div id="Recommended" class="tabcontent">
+        <table>
+            <tr>
+                <td>
+                    <button class="recitem">
+                        Sunrise
+                    </button>
+                </td>
+                <td>
+                    <button class="recitem">
+                        Night Mode
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="recitem">
+                        Gaming
+                    </button>
+                </td>
+                <td>
+                    <button class="recitem">
+                        Movie
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="recitem">
+                        Candle Flicker
+                    </button>
+                </td>
+                <td>
+                    <button class="recitem">
+                        White
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!--TAB 2-->
+    <div id="Blink" class="tabcontent">
+        <canvas style="height: 50%;">Your browser does not support the HTML5 canvas</canvas>
+        <br>
+        <div class="slider-container">
+            <p>Blink Speed</p>
+            -
+            <input type="range" min="1" max="8" step="1" value="5" fill="none" id="blinkspeed" class="speedslider">
+            +
+        </div>
+    </div>
+
+    <!--TAB 3-->
+    <div id="Color" class="tabcontent">
+        <canvas style="height: 100%">Your browser does not support the HTML5 canvas</canvas>
+    </div>
+
+    <!--TAB 4-->
+    <div id="Flow" class="tabcontent">
+        <div class="flowpicker-container">
+            <!--FLOW COLOR 1-->
+            <button class="flowpicker-icon" onclick="openFlowpicker(event , 1)">
+                <svg width="50" height="70" id="flowcolor1">
+                    <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0" />
+                    <circle cx="25" cy="25" r="15" fill="black" />
+                    <polygon points="18,70 32,70 25,60" fill="red" class="currentflowselection" />
+                </svg>
+            </button>
+            <!-- FLOW COLOR 2-->
+            <button class="flowpicker-icon" onclick="openFlowpicker(event , 2)">
+                <svg width="50" height="70" id="flowcolor2">
+                    <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0" />
+                    <circle cx="25" cy="25" r="15" fill="black" />
+                    <polygon points="18,70 32,70 25,60" fill="red" class="currentflowselection" />
+                </svg>
+            </button>
+            <!-- FLOW COLOR 3-->
+            <button class="flowpicker-icon" onclick="openFlowpicker(event , 3)">
+                <svg width="50" height="70" id="flowcolor3">
+                    <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0" />
+                    <circle cx="25" cy="25" r="15" fill="black" />
+                    <polygon points="18,70 32,70 25,60" fill="red" class="currentflowselection" />
+                </svg>
+            </button>
+            <!-- FLOW COLOR 4-->
+            <button class="flowpicker-icon" onclick="openFlowpicker(event , 4)">
+                <svg width="50" height="70" id="flowcolor4">
+                    <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0" />
+                    <circle cx="25" cy="25" r="15" fill="black" />
+                    <polygon points="18,70 32,70 25,60" fill="red" class="currentflowselection" />
+                </svg>
+            </button>
+
+            <div class="colorslider-container">
+                <input type="range" class="colorslider" min="0" max="100" id="colorslider">
+            </div>
+        </div>
+
+
+        <br>
+
+        <div class="slider-container">
+            <p>Flow Speed</p>
+            -
+            <input type="range" min="1" max="8" step="1" value="5" fill="none" id="flowspeed" class="speedslider">
+            +
+        </div>
+    </div>
+    <!-- END TAB CONTENT -->
+
+    <footer>
+        <div class="slider-container">
+            <img src="https://image.freepik.com/free-icon/black-sun-vector_318-10905.jpg" height="20px" width="20px">
+            <input type="range" min="1" max="100" value="100" id="brightness" class="regslider">
+            <var id="bright">XXX</var>
+        </div>
+        <br>
+        <br>
+        <div class="bot-navbar">
+            <button>
+                <img src="https://image.freepik.com/free-icon/power-button_318-32601.jpg" height="30px" width="30px">
+            </button>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="color.js"></script>
+</body>
+
+</html>

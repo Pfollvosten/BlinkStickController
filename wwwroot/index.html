@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>BlinkStick</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="tab">
+            <button class="tablinks" onclick="openMode(event, 'Recommended')">Recommended</button>
+            <button class="tablinks" onclick="openMode(event, 'Blink')">Blink</button>
+            <button class="tablinks" onclick="openMode(event, 'Color')">Color</button>
+            <button class="tablinks" onclick="openMode(event, 'Flow')">Flow</button>
+        </div>
+    </header>
+
+    <!--  TAB CONTENT  -->
+    <!--TAB 1-->
+    <div id="Recommended" class="tabcontent">
+        Deez nutz
+    </div>
+
+    <!--TAB 2-->
+    <div id="Blink" class="tabcontent">
+        <div class="canvas-container">
+            <canvas height="400" class="color-canvas">Your browser does not support the HTML5 canvas</canvas>
+        </div>
+        <br>
+        <div class="slider-container">
+            <input type="range" min="1" max="8" value="5" class="speed-slider" id="blinkspeed">
+        </div>
+    </div>
+
+    <!--TAB 3-->
+    <div id="Color" class="tabcontent">
+        <canvas height="400" class="color-canvas">Your browser does not support the HTML5 canvas</canvas>
+    </div>
+
+    <!--TAB 4-->
+    <div id="Flow" class="tabcontent">
+        <!--FLOW COLOR 1-->
+        <svg width="50" height="70" id="flowcolor1">
+            <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0"/>
+            <circle cx="25" cy="25" r="15" fill="black" />
+            <polygon points="18,70 32,70 25,60" fill="red" />
+        </svg>
+        <!-- FLOW COLOR 2-->
+        <svg width="50" height="70" id="flowcolor2">
+            <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0"/>
+            <circle cx="25" cy="25" r="15" fill="black" />
+            <polygon points="18,70 32,70 25,60" fill="red" />
+        </svg>
+        <!-- FLOW COLOR 3-->
+        <svg width="50" height="70" id="flowcolor3">
+            <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0"/>
+            <circle cx="25" cy="25" r="15" fill="black" />
+            <polygon points="18,70 32,70 25,60" fill="red" />
+        </svg>
+        <!-- FLOW COLOR 4-->
+        <svg width="50" height="70" id="flowcolor4">
+            <circle cx="25" cy="25" r="20" stroke-width="3" stroke="black" fill-opacity="0.0"/>
+            <circle cx="25" cy="25" r="15" fill="black" />
+            <polygon points="18,70 32,70 25,60" fill="red" />
+        </svg>
+        <br> <br>
+        
+        <canvas height="150" class="color-canvas">Your browser does not support the HTML5 canvas</canvas>
+        <br><br><br><br>
+        <div class="slider-container">
+            <input type="range" min="1" max="8" step="1" value="5" fill="none" id="flowspeed" class="speed-slider">
+        </div>
+    </div>
+    <!-- END TAB CONTENT -->
+
+    <footer>
+        <div>
+            <!--Sun icon-->
+            <input type="range" min="1" max="100" value="100" id="brightness" class="slider">
+        </div>
+        <ul class="bot-navbar">
+            <li>
+                <button>Power</button>
+            </li>
+        </ul>
+    </footer>
+
+
+    
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="color.js"></script>
+</body>
+
+</html>
