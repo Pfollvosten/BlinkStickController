@@ -25,6 +25,7 @@ header{
     margin: auto;
     position: relative;
     background-color: white;
+    align-content: center;
 }
 .tablinks {
     margin: auto;
@@ -38,7 +39,7 @@ header{
 
 
 canvas{
-    width: 100%;
+    /*width: 100%;*/
     -webkit-filter: blur(5px);
     -webkit-filter: opacity(0.5);
 }
@@ -62,6 +63,7 @@ tr {
 td {
     width: 50%;
     height: 30%;
+    margin: auto;
 }
 .recitem {
     background-color: white;

@@ -1,35 +1,33 @@
-var r = 255, g = 255, b = 255, bright = 100;
-var mode , speed;
-var blinkspeed , flowspeed;
-var flowcolors =  [
-    [255, 0, 0],
-    [0, 255, 0],
-    [0, 0, 255],
-    [255, 0, 255],
-];
+var submit = {
+    power: true,
+    color: [
+        255,
+        255,
+        255
+    ],
+    bright: 100,
+    mode: "color",
+    blinkspeed: 5,
+    flowspeed: 5,
+    flowcolors: [
+        [255, 0, 0],
+        [0, 255, 0],
+        [0, 0, 255],
+        [255, 0, 255]
+    ]
+}
 
 function updateColor(){
-    var socket = io.connect('http://localhost');
-    socket.emit('color update', 
-        {
-            red:this.r,
-            green:this.g,
-            blue:this.b,
-            brightness:this.bright,
-            mode: this.mode,
-            blinkspeed: this.blinkspeed,
-            flowspeed: this.flowspeed,
-
-            //WIP
-        }
-    );
+    var socket = io.connect('http://192.168.178.28');
+    console.log(submit);
+    socket.emit('color update', submit);
 }
 
 window.onload = function(){
     //initialize the color pickers
     initColorPicker();
     //click the first tab on start
-    openMode(event, "Recommended");
+    this.document.getElementsByClassName("tablinks")[0].click();
     //Click first flowpicker on start"
     openFlowpicker(event, 1);
 }
@@ -37,7 +35,7 @@ window.onload = function(){
 function openMode(evt, modeName){
     console.log("Tabchange to " + modeName);
     if(modeName != 'Recommended'){
-        mode = modeName;
+        submit.mode = modeName;
     }
 
     //Variables
@@ -51,13 +49,14 @@ function openMode(evt, modeName){
     tablinks = document.getElementsByClassName("tablinks");
     for(i = 0; i < tablinks.length; i++){
         tablinks[i].className = tablinks[i].className.replace(" active", "");
+        tablinks[i].style.color = "black";
     }
     //Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(modeName).style.display = "block";
     evt.currentTarget.classname += " active";
-    //Change color of clicked button and unerline it
+    //Change color of clicked button
     evt.currentTarget.style.color = "red";
-
+    updateColor();
 }
 
 function initColorPicker()
@@ -85,10 +84,8 @@ function initColorPicker()
         {
             var imgData = ctx.getImageData(mouseEvent.offsetX, mouseEvent.offsetY, 1, 1);
             var rgba = imgData.data;
-            console.log("rgba(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2] + ", " + rgba[3] + ")");
-            r = rgba[0];
-            g = rgba[1]
-            b = rgba[2];
+            console.log("rgba(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2] + ")");
+            submit.color = [rgba[0] , rgba[1] , rgba[2]];
             updateColor();
         }
     }
@@ -99,17 +96,17 @@ function initColorPicker()
 var recitems = document.getElementsByClassName('recitem');
 //Sunrise
 recitems[0].onclick = function(){
-    mode = color;
-    bright = 60;
-    r = 255; g = 230; b = 100;
+    submit.mode = "color";
+    submit.bright = 60;
+    submit.color = [255, 230 ,100];
     updateColor();
     console.log("Applied Recommendation 1");
 }
 //Night Mode
 recitems[1].onclick = function(){
-    mode = color;
-    bright = 30;
-    r = 2; g = 20; b = 255;
+    submit.mode = "color";
+    submit.bright = 30;
+    submit.color = [2 , 20 ,255];
     updateColor();
     console.log("Applied Recommendation 2");
 }
@@ -119,9 +116,9 @@ recitems[2].onclick = function(){
 }
 //Movie
 recitems[3].onclick = function(){
-    mode = color;
-    bright = 85;
-    r = 200; g = 140; b = 255;
+    submit.mode = "color";
+    submit.bright = 85;
+    submit.color = [200 , 140 , 255];
     updateColor();
     console.log("Applied Recommendation 4");
 }
@@ -132,16 +129,19 @@ recitems[4].onclick = function(){
 }
 //White
 recitems[5].onclick = function(){
-    mode = color;
-    bright = 80;
-    r = 255; g = 245; b=240;
+    submit.mode = "color";
+    submit.bright = 80;
+    submit.color = [255 , 245 , 240];
     updateColor();
     console.log("Applied Recommendation 6");
 }
+
 //TAB 2
 $("#blinkspeed").on("mouseup", function(){
-    blinkspeed = this.value;
+    submit.blinkspeed = this.value;
+    updateColor();
 });
+
 //TAB 4
 var flowpicker = document.getElementsByClassName("flowpicker-icon");
 var currflowpicker;
@@ -157,7 +157,8 @@ function openFlowpicker(evt, pos){
 }
 
 $("#flowspeed").on("mouseup", function(){
-    flowspeed = this.value;
+    submit.flowspeed = this.value;
+    updateColor();
 });
 
 //Image data from canvas to get value of col slider
@@ -167,10 +168,26 @@ $("#colorslider").on("change", function(){
     fillcolor = canvas.getContext("2d").getImageData((this.value/100)*canvas.width , canvas.height/2 , 1, 1).data;
     console.log(fillcolor);
     //Set it as one of the 4 Flowcolors
-    flowcolors[currflowpicker-1] = fillcolor;
+            //flowcolors[currflowpicker-1] = fillcolor;
+    submit.flowcolors[currflowpicker-1] = [fillcolor[0] , fillcolor[1] , fillcolor[2] ];
+    updateColor();
     //change color of svg;
     document.getElementById("flowcolor" + currflowpicker).children[0].style.stroke =
     "rgb(" + fillcolor[0] + ", " +  fillcolor[1] + ", " + fillcolor[2] +")";
     document.getElementById("flowcolor" + currflowpicker).children[1].style.fill = 
      "rgb(" + fillcolor[0] + ", " +  fillcolor[1] + ", " + fillcolor[2] +")";
+});
+
+
+//Footer
+$("#brightness").on("change", function(){
+    submit.bright = this.value;
+    $('#bright').html(this.value);
+    updateColor();
+});
+
+$("#power").on("click", function(){
+    submit.power = submit.power ? false : true;
+    //make power button svg und ändere farbe wenn an oder aus
+    updateColor();
 });
