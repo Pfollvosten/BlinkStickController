@@ -12,7 +12,7 @@ var io = require('socket.io')(http);
 var led = blinkstick.findFirst();
 led.inverse = true;
 
-app.get('/', function (req, res) {
+app.get('/wwwroot/color.js', function (req, res) {
     res.sendFile(__dirname + '/wwwroot/blinkstick.html');
 });
 
@@ -35,13 +35,28 @@ function applyColor(data){
                 case "Color":
                     led.setColor(data.color[0] , data.color[1] , data.color[2]);
                 break;
-        
                 case "Blink":
-
+                    function blink(){
+                        led.morph(data.flowcolors[0][0], data.flowcolors[0][1], data.flowcolors[0][2], {"duration":200, "steps":50 } , function(){
+                            if(data.power && data.mode == "Blink"){
+                                setTimeout(1000/data.blinkspeed);
+                                blink();
+                            }
+                        });
+                    }
                 break;
-        
                 case "Flow":
-                    
+                    function flow(){
+                        led.morph(data.flowcolors[0][0], data.flowcolors[0][1], data.flowcolors[0][2], {"duration":data.flowspeed*1000/4 , "steps":50 } , function(){
+                            led.morph(data.flowcolors[1][0], data.flowcolors[1][1], data.flowcolors[1][2], {"duration":data.flowspeed*1000/4 , "steps":50 } , function(){
+                                led.morph(data.flowcolors[2][0], data.flowcolors[2][1], data.flowcolors[2][2], {"duration":data.flowspeed*1000/4 , "steps":50 } , function(){
+                                    led.morph(data.flowcolors[3][0], data.flowcolors[3][1], data.flowcolors[3][2], {"duration":data.flowspeed*1000/4 , "steps":50 } , function(){
+                                        if(data.power && data.mode == "Flow"){ flow(); }
+                                    });
+                                });
+                            });
+                        });
+                    }
                 break;
             }
         }
@@ -50,6 +65,5 @@ function applyColor(data){
             led.setColor("black");
         }
     }
-
     //Apply brigtness
 }
