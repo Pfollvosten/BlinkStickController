@@ -12,6 +12,7 @@ var io = require('socket.io')(http);
 var led = blinkstick.findFirst();
 led.inverse = true;
 
+app.use(express.static("wwwroot"));
 app.get('/wwwroot/color.js', function (req, res) {
     res.sendFile(__dirname + '/wwwroot/blinkstick.html');
 });
